@@ -195,11 +195,36 @@ def read_crates_file(filepath:str):
     stacks.pop()
     print(stacks)
     return (stacks, outputInstuctions)
+
+
+def day_6():
+    lines = read_input_file("Inputs/Day6.txt",str)
+    n=14
+    for i in range(len(lines[0])-n+1):
+        batch = lines[0][i:i+n]
+        if uniqueCharacters(batch):
+            print(i+n)
+            break
     
+def uniqueCharacters(st):
+ 
+    # Using sorting
+    st = sorted(st)
+ 
+    for i in range(len(st)-1):
+ 
+        # if at any time, 2 adjacent
+        # elements become equal,
+        # return false
+        if (st[i] == st[i + 1]) :
+            return False
+             
+    return True 
 if __name__ == "__main__":
     # day_1()
     # day_2()
     # day_3()
     # day_4()
-    day_5()
+    # day_5()
+    day_6()
     #day_10_2021()
