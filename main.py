@@ -1,4 +1,6 @@
+from collections import defaultdict
 from curses.ascii import islower
+import pprint
 import numpy as np
 import re
 
@@ -207,24 +209,71 @@ def day_6():
             break
     
 def uniqueCharacters(st):
- 
     # Using sorting
     st = sorted(st)
- 
     for i in range(len(st)-1):
- 
         # if at any time, 2 adjacent
         # elements become equal,
         # return false
         if (st[i] == st[i + 1]) :
-            return False
-             
+            return False  
     return True 
+
+def day_7():
+    lines = read_input_file("Inputs/Day7.txt",str)
+    sizes = defaultdict(int)
+    path = []
+    numbers = (r"^\d+")
+    
+    for line in lines:
+        if line.startswith("$ cd"):
+            d = line.split()[-1]
+            if d == '..':
+                path.pop()
+                print(f"Moving to : {path}")
+            else:
+                if d == "/":
+                    path.append("root")
+                else:
+                    path.append(d)
+                    print(f"Moving to {path}")
+        elif line.startswith("$ ls"):
+            print("Listing stuff") 
+            continue
+        elif line.startswith("dir"):
+            print(f"Listing Directory {line}")
+            continue
+        elif re.match(numbers,line):
+            print(f"file: {line}")
+            size , _ = line.split()
+            if re.match(numbers, size): # I know it'S dumb 
+                for i in range(len(path)):
+                    sizes["/".join(path[:i+1])] += int(size)
+        else:
+            print("error")
+    pprint.pprint(sizes)
+    amount = 0
+
+    for key, value in sizes.items():
+        if value < 10**5:
+            amount += value
+    print(f"{amount}")
+    
+    total_disk_space = 7*10**7
+    desired_free_disk_space = 3*10**7
+
+    free_space = total_disk_space - sizes["root"]
+    needed_for_update = desired_free_disk_space - free_space
+
+    s = [s for s in sorted(sizes.values()) if s >= needed_for_update]	
+
+    print("The smallest directory that, if deleted, would free up enough space on the filesystem to run the update has the total size: %d" % int(s[0]))
 if __name__ == "__main__":
     # day_1()
     # day_2()
     # day_3()
     # day_4()
     # day_5()
-    day_6()
+    # day_6()
+    day_7()
     #day_10_2021()
