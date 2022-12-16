@@ -268,6 +268,69 @@ def day_7():
     s = [s for s in sorted(sizes.values()) if s >= needed_for_update]	
 
     print("The smallest directory that, if deleted, would free up enough space on the filesystem to run the update has the total size: %d" % int(s[0]))
+    
+    
+def day_8():
+    tree_grid = np.array(read_input_file("Inputs/Day8.txt", intArrayBuilder))
+    v = set()
+    for i in range(len(tree_grid)):
+        m = -1
+        for j in range(len(tree_grid)):
+            if tree_grid[i][j]>m:v.add((j,i))
+            m=max(m,tree_grid[i][j])
+    
+    for i in range(len(tree_grid)):
+        m=-1
+        for ii in range(len(tree_grid[i])-1, -1,-1):
+            if tree_grid[i][ii]>m:v.add((ii,i))
+            m=max(m,tree_grid[i][ii])
+            
+    for i in range(len(tree_grid[0])):
+        m=-1
+        for ii in range(len(tree_grid)):
+            if tree_grid[ii][i]>m:v.add((i,ii))
+            m=max(m,tree_grid[ii][i])
+
+    for i in range(len(tree_grid[0])):
+        m=-1
+        for ii in range(len(tree_grid)-1,-1,-1):
+            if tree_grid[ii][i]>m:v.add((i,ii))
+            m=max(m,tree_grid[ii][i])
+
+    print(f"tree coverage: {len(v)}")
+    t = 0
+    for i in range(len(tree_grid)):
+        for r in range(len(tree_grid[0])):
+            y=1
+
+            o=0
+            for ii in range(i+1,len(tree_grid)):
+                if tree_grid[ii][r]<tree_grid[i][r]:o+=1
+                else:o+=1;break
+            y*=o
+                
+
+            o=0
+            for ii in range(i-1,-1,-1):
+                if tree_grid[ii][r]<tree_grid[i][r]:o+=1
+                else:o+=1;break
+            y*=o
+    
+            o=0
+            for rr in range(r+1,len(tree_grid[0])):
+                if tree_grid[i][rr]<tree_grid[i][r]:o+=1
+                else:o+=1;break
+            y*=o
+    
+            o=0
+            for rr in range(r-1,-1,-1):
+                if tree_grid[i][rr]<tree_grid[i][r]:o+=1
+                else:o+=1;break
+            y*=o
+
+            t=max(y,t)
+    print(f"best tree score: {t}")
+    
 if __name__ == "__main__":
     # day_1()
     # day_2()
@@ -275,5 +338,6 @@ if __name__ == "__main__":
     # day_4()
     # day_5()
     # day_6()
-    day_7()
+    # day_7()
+    day_8()
     #day_10_2021()
