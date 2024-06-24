@@ -330,7 +330,17 @@ def day_8():
 
             t=max(y,t)
     print(f"best tree score: {t}")
-    
+
+def plankReader(line):
+    matches = re.search(r'(\w) (\d*)',line)
+    output = []
+    output.append(matches.groups()[0])
+    output.append(int(matches.groups()[1]))
+    return output
+
+def day_9():
+    lines = read_input_file("Inputs/Day9.txt",plankReader)
+    print(lines)
 if __name__ == "__main__":
     # day_1()
     # day_2()
@@ -339,5 +349,6 @@ if __name__ == "__main__":
     # day_5()
     # day_6()
     # day_7()
-    day_8()
+    # day_8()
+    day_9()
     #day_10_2021()
